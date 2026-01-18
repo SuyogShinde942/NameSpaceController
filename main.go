@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -37,6 +38,21 @@ func createClient(kubeconfigPath string) (kubernetes.Interface, error) {
 	return client, nil
 }
 
+func watchNamespaces(clientset kubernetes.Interface) {
+	watcher, err := clientset.CoreV1().Namespaces().Watch(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		panic(err)
+	}
+
+	for event := range watcher.ResultChan() {
+		if event.Type == watch.Added {
+			nsObj := event.Object.(metav1.Object)
+			fmt.Println(" New namespace created:", nsObj.GetName())
+			fmt.Println("Replicate the secret ", nsObj.GetName(), "Replicate the sercet from here ")
+		}
+	}
+}
+
 func main() {
 	home := homedir.HomeDir()
 
@@ -65,4 +81,6 @@ func main() {
 	for i, p := range podList.Items {
 		fmt.Printf("Index: %d | Pod: %s | Phase: %s\n", i, p.Name, p.Status.Phase)
 	}
+
+	watchNamespaces(clientset)
 }
