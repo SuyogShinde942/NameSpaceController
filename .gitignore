@@ -1,1 +1,55 @@
-./*notes*
+# ========================
+# Go build outputs
+# ========================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Binary / build folders
+bin/
+dist/
+build/
+
+# ========================
+# Go workspace / cache
+# ========================
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Go coverage
+coverage.out
+*.coverprofile
+
+# ========================
+# Vendor (ignore if you DON'T commit vendor)
+# ========================
+vendor/
+
+# ========================
+# IDE / Editor
+# ========================
+.vscode/
+.idea/
+*.iml
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Kubernetes / local configs
+# ========================
+kubeconfig
+*.kubeconfig
+.env
+.env.*
+
+notes
