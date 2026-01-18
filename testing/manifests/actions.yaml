@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: actions
+  name: actions
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actions
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: actions
+    spec:
+      serviceAccountName: default 
+      containers:
+      - image: rahul079/actions:0.1.13
+        name: actions
+        resources: {}
+status: {}
