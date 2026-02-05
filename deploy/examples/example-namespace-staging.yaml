@@ -1,0 +1,10 @@
+# Example namespace that replicates a secret into a "staging" namespace
+# Ensure the source secret exists in default before applying this.
+# Usage: kubectl apply -f deploy/examples/example-namespace-staging.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: staging
+  annotations:
+    # Replicate "my-secret" from "default" into this namespace
+    replicate-secret: "default/my-secret"

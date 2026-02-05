@@ -1,53 +1,44 @@
-# ========================
-# Go build outputs
-# ========================
+# Binaries for programs and plugins
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
-*.test
-*.out
-
-# Binary / build folders
 bin/
 dist/
-build/
 
-# ========================
-# Go workspace / cache
-# ========================
-*.log
-*.tmp
-*.swp
-.DS_Store
+# Test binary, built with `go test -c`
+*.test
 
-# Go coverage
+# Output of the go coverage tool
+*.out
 coverage.out
-*.coverprofile
 
-# ========================
-# Vendor (ignore if you DON'T commit vendor)
-# ========================
+# Dependency directories
 vendor/
 
-# ========================
-# IDE / Editor
-# ========================
-.vscode/
-.idea/
-*.iml
+# Go workspace file
+go.work
 
-# ========================
-# OS files
-# ========================
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
 Thumbs.db
 
-# ========================
-# Kubernetes / local configs
-# ========================
-kubeconfig
-*.kubeconfig
+# Build artifacts
+*.tar
+*.tar.gz
+
+# Local development
 .env
-.env.*
+.env.local
+
+# Kubernetes
+*.kubeconfig
+kubeconfig

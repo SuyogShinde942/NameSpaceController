@@ -1,0 +1,36 @@
+---
+# Deployment for the controller
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: namespace-controller
+  namespace: default
+  labels:
+    app: namespace-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: namespace-controller
+  template:
+    metadata:
+      labels:
+        app: namespace-controller
+    spec:
+      serviceAccountName: namespace-controller
+      containers:
+        - name: controller
+          # Replace with your image registry and tag
+          # Example: image: your-registry/namespace-controller:latest
+          # For local testing, you can build and load the image:
+          # make docker-build && make kind-load  # if using kind
+          image: namespace-controller:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+      restartPolicy: Always
