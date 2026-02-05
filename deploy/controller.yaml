@@ -1,0 +1,79 @@
+---
+# This file combines RBAC and Deployment for easy deployment
+# For production, consider using config/rbac/rbac.yaml and config/manager/manager.yaml separately
+
+# ServiceAccount for the controller
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: namespace-controller
+  namespace: default
+---
+# ClusterRole is needed because we need to access secrets across all namespaces
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: namespace-controller-cluster-role
+rules:
+  # Watch and list namespaces (cluster-scoped)
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list", "watch"]
+  # Get secrets from any namespace (source)
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+  # Create secrets in any namespace (target)
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create", "update", "patch"]
+---
+# ClusterRoleBinding to bind ClusterRole to ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: namespace-controller-cluster-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: namespace-controller-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: namespace-controller
+    namespace: default
+---
+# Deployment for the controller
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: namespace-controller
+  namespace: default
+  labels:
+    app: namespace-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: namespace-controller
+  template:
+    metadata:
+      labels:
+        app: namespace-controller
+    spec:
+      serviceAccountName: namespace-controller
+      containers:
+        - name: controller
+          # Replace with your image registry and tag
+          # Example: image: your-registry/namespace-controller:latest
+          # For local testing, you can build and load the image:
+          # make docker-build && make kind-load  # if using kind
+          image: namespace-controller:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+      restartPolicy: Always

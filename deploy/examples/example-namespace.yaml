@@ -1,0 +1,11 @@
+# Example namespace with replication annotation
+# This namespace will trigger secret replication when created.
+# Uses an annotation (not a label) because values like "default/my-secret" are invalid in labels.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-namespace
+  annotations:
+    # Format: "source-namespace/secret-name"
+    # This tells the controller to copy "my-secret" from "default" namespace
+    replicate-secret: "default/my-secrets"

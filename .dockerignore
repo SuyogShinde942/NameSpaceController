@@ -1,0 +1,10 @@
+README.md
+docs/
+deploy/
+config/
+build/
+.git
+.gitignore
+*.md
+bin/
+.DS_Store
